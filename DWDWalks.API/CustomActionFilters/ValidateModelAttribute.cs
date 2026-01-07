@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace DWDWalks.API.CustomActionFilters
 {
-    public class ValidateModelAttribute: ActionFilterAttribute
+    public class ValidateModelAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
@@ -13,4 +13,5 @@ namespace DWDWalks.API.CustomActionFilters
                 context.Result = new BadRequestResult();
             }
         }
+    }
 }

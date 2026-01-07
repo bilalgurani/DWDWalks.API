@@ -41,9 +41,9 @@ namespace DWDWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
         {
-            var getWalks = await walkRepository.GetAllAsync();
+            var getWalks = await walkRepository.GetAllAsync(filterOn, filterQuery);
 
             return Ok(mapper.Map<List<WalkDto>>(getWalks));
         }
