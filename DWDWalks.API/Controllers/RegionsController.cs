@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DWDWalks.API.CustomActionFilters;
 using DWDWalks.API.Data;
 using DWDWalks.API.Models.Domain;
 using DWDWalks.API.Models.DTO;
@@ -51,6 +52,7 @@ namespace DWDWalks.API.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public async Task<ActionResult> CreateRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
             if (ModelState.IsValid == false)
@@ -69,6 +71,7 @@ namespace DWDWalks.API.Controllers
 
         [HttpPut]
         [Route("{id:Guid}")]
+        [ValidateModel]
         public async Task<ActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
             if (ModelState.IsValid == false)
