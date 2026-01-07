@@ -40,9 +40,10 @@ namespace DWDWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
+        //api/walks?filterOn=name&filterQuery=bilal&sortBy=name&isAscending=true&pageNumber=1&pageSize=10
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var getWalks = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
+            var getWalks = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
 
             return Ok(mapper.Map<List<WalkDto>>(getWalks));
         }

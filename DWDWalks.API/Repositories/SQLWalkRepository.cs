@@ -18,7 +18,7 @@ namespace DWDWalks.API.Repositories
             return walk;
         }
 
-        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool? isAscending = true)
+        public async Task<List<Walk>> GetAllAsync(string? filterOn = null, string? filterQuery = null, string? sortBy = null, bool? isAscending = true, int pageNumber = 1, int pageSize = 10)
         {
             var walks = dBContext.Walks.Include("Difficulty").Include("Region").AsQueryable();
 
@@ -30,6 +30,7 @@ namespace DWDWalks.API.Repositories
                     walks = walks.Where(x => x.Name.Contains(filterQuery));
                 }
             }
+
             // Sorting
             if (string.IsNullOrWhiteSpace(sortBy) == false)
             {
@@ -41,7 +42,10 @@ namespace DWDWalks.API.Repositories
                     walks = isAscending == true ? walks.OrderBy(x => x.LengthInKm) : walks.OrderByDescending(x => x.LengthInKm);
                 }
             }
-            return await walks.ToListAsync();
+
+            // Pagination
+            var skipResults = (pageNumber - 1) * pageSize;
+            return await walks.Skip(skipResults).Take(pageSize).ToListAsync();
             //return await dBContext.Walks.Include("Difficulty").Include("Region").ToListAsync();
         }
 
