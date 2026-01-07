@@ -2,7 +2,6 @@
 using DWDWalks.API.Models.Domain;
 using DWDWalks.API.Models.DTO;
 using DWDWalks.API.Repositories;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DWDWalks.API.Controllers
@@ -41,9 +40,9 @@ namespace DWDWalks.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery)
+        public async Task<IActionResult> GetAllAsync([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery] string? sortBy, [FromQuery] bool? isAscending)
         {
-            var getWalks = await walkRepository.GetAllAsync(filterOn, filterQuery);
+            var getWalks = await walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true);
 
             return Ok(mapper.Map<List<WalkDto>>(getWalks));
         }
@@ -84,7 +83,7 @@ namespace DWDWalks.API.Controllers
         public async Task<IActionResult> DeleteByIdAsync([FromRoute] Guid id)
         {
             var deletedWalk = await walkRepository.DeleteByIdAsync(id);
-            if (deletedWalk == null) 
+            if (deletedWalk == null)
             {
                 return NotFound();
             }
