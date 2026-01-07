@@ -4,6 +4,7 @@ using DWDWalks.API.Data;
 using DWDWalks.API.Models.Domain;
 using DWDWalks.API.Models.DTO;
 using DWDWalks.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ namespace DWDWalks.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RegionsController : Controller
     {
         private readonly DWDWalksDBContext dbContext;

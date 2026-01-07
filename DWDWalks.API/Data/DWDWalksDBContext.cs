@@ -5,7 +5,7 @@ namespace DWDWalks.API.Data
 {
     public class DWDWalksDBContext: DbContext
     {
-        public DWDWalksDBContext(DbContextOptions dbContextOptions): base(dbContextOptions)
+        public DWDWalksDBContext(DbContextOptions<DWDWalksDBContext> dbContextOptions): base(dbContextOptions)
         {
             
         }
