@@ -12,8 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DWDWalks.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
+    [ApiController]    
     public class RegionsController : Controller
     {
         private readonly DWDWalksDBContext dbContext;
@@ -27,6 +26,7 @@ namespace DWDWalks.API.Controllers
             this.mapper = mapper;
         }
         [HttpGet]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<ActionResult<RegionDto>> GetAll()
         {
             var regionsDomain = await regionRepository.GetAllAsync();
@@ -38,6 +38,7 @@ namespace DWDWalks.API.Controllers
         }
 
         [HttpGet("{id:Guid}")]
+        [Authorize(Roles = "Reader, Writer")]
         public async Task<ActionResult<Region>> GetRegionById([FromRoute] Guid id)
         {
             var regionDomain = await regionRepository.GetByIdAsync(id);
@@ -55,6 +56,7 @@ namespace DWDWalks.API.Controllers
 
         [HttpPost]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> CreateRegion([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
             if (ModelState.IsValid == false)
@@ -74,6 +76,7 @@ namespace DWDWalks.API.Controllers
         [HttpPut]
         [Route("{id:Guid}")]
         [ValidateModel]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
         {
             if (ModelState.IsValid == false)
@@ -98,6 +101,7 @@ namespace DWDWalks.API.Controllers
 
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<ActionResult> DeleteRegion([FromRoute] Guid id)
         {
             var regionDomainModel = await regionRepository.DeleteAsync(id);

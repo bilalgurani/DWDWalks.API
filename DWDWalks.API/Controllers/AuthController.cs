@@ -1,4 +1,5 @@
 ﻿using DWDWalks.API.Models.DTO;
+using DWDWalks.API.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +11,13 @@ namespace DWDWalks.API.Controllers
     public class AuthController : ControllerBase
     {
         readonly UserManager<IdentityUser> userManager;
-        public AuthController(UserManager<IdentityUser> userManager)
+        readonly ITokenRepository tokenRepository;
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository)
         {
             this.userManager = userManager;
+            this.tokenRepository = tokenRepository;
         }
+
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
@@ -54,8 +58,19 @@ namespace DWDWalks.API.Controllers
 
                 if (checkPasswordResult)
                 {
-                    // Create a token
-                    return Ok();
+                    // Get Roles
+                    var roles = await userManager.GetRolesAsync(user);
+                    if (roles != null)
+                    {
+                        // Create a token
+                        var newToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+                        var response = new LoginResponseDto
+                        {
+                            token = newToken,
+                        };
+                        return Ok(response);
+                    }
+                    
                 }
             }
             return BadRequest("Invalid username or password!");
